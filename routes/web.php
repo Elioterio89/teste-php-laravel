@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Auth::routes();
+Route::post('/upload-file', [App\Http\Controllers\DocumentController::class, 'uploadFile'])->name('file.upload');
+Route::get('', [App\Http\Controllers\DocumentController::class, 'index']);
+Route::get('/dispatch-document-queue', [App\Http\Controllers\DocumentController::class, 'dispatchDocumentQueue'])->name('process.documents');;
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

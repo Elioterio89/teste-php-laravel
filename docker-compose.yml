@@ -1,0 +1,53 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: travellist
+    container_name: teste-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - travellist
+  db:
+    image: python:3-alpine
+    command: sh -c "apk add --no-cache sqlite && touch /var/www/html/database/database.sqlite && chmod 777 /var/www/html/database/database.sqlite && tail -f /dev/null"
+    restart: unless-stopped
+    volumes:
+      - ./docker-compose/sqlite:/var/www/html/database
+    networks:
+      - travellist
+
+  cache:
+    restart: always
+    container_name: teste-redis
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/cache/redis.conf:/etc/redis/redis.conf
+    entrypoint: redis-server /etc/redis/redis.conf
+    networks:
+      - travellist
+
+  nginx:
+    image: nginx:alpine
+    container_name: teste-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - travellist
+
+networks:
+  travellist:
+    driver: bridge

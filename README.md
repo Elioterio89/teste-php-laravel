@@ -1,28 +1,32 @@
-![Logo AI Solutions](http://aisolutions.tec.br/wp-content/uploads/sites/2/2019/04/logo.png)
+## Requisitos
+- Docker
+- Docker-compose
+- Preferência SO linux
 
-# AI Solutions
+## Observações
 
-## Teste para novos candidatos (PHP/Laravel)
+- Fazer  o clone do projeto ou download em zip
+- Acessar a pasta do projeto
+- Verificar que nenhuma outra aplicação esta usando as porta 3306 e 8000
 
-### Introdução
+## Instação
+- Copiar o .env.dist e renomear para .env
+- docker-compose up
 
-Este teste utiliza PHP 8.1, Laravel 10 e um banco de dados SQLite simples.
+## Rodar os seguintes comandos - Passo 1
+- docker-compose exec app composer install 
+- docker-compose exec app php artisan key:generate
+- docker-compose exec app npm install
+- docker-compose exec app composer dump-autoload
+## Passo 2
+- php artisan migrate:fresh
+- docker-compose exec app php artisan db:seed --class=CategorySeeder
+## Acessar aplicação
 
-1. Faça o clone desse repositório;
-1. Execute o `composer install`;
-1. Crie e ajuste o `.env` conforme necessário
-1. Execute as migrations e os seeders;
+- Acessar: http://localhost:8000
 
-### Primeira Tarefa:
 
-Crítica das Migrations e Seeders: Aponte problemas, se houver, e solucione; Implemente melhorias;
+## Menus
 
-### Segunda Tarefa:
-
-Crie a estrutura completa de uma tela que permita adicionar a importação do arquivo `storage/data/2023-03-28.json`, para a tabela `documents`. onde cada registro representado neste arquivo seja adicionado a uma fila para importação.
-
-Feito isso crie uma tela com um botão simples que dispara o processamento desta fila.
-
-Utilize os padrões que preferir para as tarefas.
-
-Boa sorte!
+- upload documents: http://localhost:8000
+- dispatch queue =>  http://localhost:8000/dispatch-queue

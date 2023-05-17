@@ -16,12 +16,13 @@ return new class extends Migration
             $table->timestamps();
             $table->bigInteger('category_id');
             $table->string('title', 60);
+            $table->integer('ano_exercicio'); // melhoria salvar ano exercicio
             $table->text('contents');
 
             $table->foreign('category_id')
                 ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
+                ->on('categories');
+                //->onDelete('cascade');
         });
     }
 
